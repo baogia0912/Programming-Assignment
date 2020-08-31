@@ -13,12 +13,12 @@ public class Lead {
     private boolean gender;
     private String phone;
     private String email;
-    private Address address;
+    private String address;
 
     public Lead() {
 
     }
-    public Lead(String id, String name, String dob, boolean gender, String phone, String email, Address address) {
+    public Lead(String id, String name, String dob, boolean gender, String phone, String email, String address) {
         this.id = id;
         this.name = name;
         this.dob = dob;
@@ -81,11 +81,11 @@ public class Lead {
         this.email = email;
     }
 
-    public Address getAddress() {
+    public String getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 
