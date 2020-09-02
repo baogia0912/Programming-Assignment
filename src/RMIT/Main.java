@@ -80,7 +80,7 @@ public class Main {
                 //go home: change it by using StringTokenizer
 
                 System.out.println("\nID: "+tokens[0]);
-                System.out.println("Name: "+tokens[1]);
+             System.out.println("Name: "+tokens[1]);
                 System.out.println("Date of birth: "+tokens[2]);
                 System.out.println("Gender: "+Boolean.parseBoolean(tokens[3]));
                 System.out.println("Phone number: "+tokens[4]);
@@ -158,33 +158,101 @@ public class Main {
     }
 
     public static void deleteLeads() {
+        Scanner scanner = new Scanner(System.in);
 
+        System.out.println("Enter Lead ID: ");
+        String idRemove = scanner.nextLine();
+        String currentLine;
+
+        try {
+            File leadsFile = new File("leads.csv");
+            File tempLeadFile = new File("temp.csv");
+
+            BufferedReader reader = new BufferedReader(new FileReader(leadsFile));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempLeadFile));
+
+            Scanner leadsContent = new Scanner(leadsFile);
+            while((currentLine = reader.readLine()) != null) {
+                // Trim newline when comparing with lineToRemove
+                String trimmedLine = currentLine.trim();
+                if(trimmedLine.contains(idRemove)) continue;
+                // Write contents of source file into temp file except for the line with user input id
+                writer.write(currentLine + System.getProperty("line.separator"));
+            }
+            reader.close();
+            writer.close();
+
+            leadsFile.delete();
+            tempLeadFile.renameTo(leadsFile);
+
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void deleteInteractions() {
+        Scanner scanner = new Scanner(System.in);
 
+        System.out.println("Enter  ID: ");
+        String idRemove = scanner.nextLine();
+        String currentLine;
+
+        try {
+            File interactionsFile = new File("interactions.csv");
+            File tempInteractionsFile = new File("temp.csv");
+
+            BufferedReader reader = new BufferedReader(new FileReader(interactionsFile));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempInteractionsFile));
+
+            Scanner interactionsContent = new Scanner(interactionsFile);
+            while((currentLine = reader.readLine()) != null) {
+                // Trim newline when comparing with lineToRemove
+                String trimmedLine = currentLine.trim();
+                if(trimmedLine.contains(idRemove)) continue;
+                // Write contents of source file into temp file except for the line with user input id
+                writer.write(currentLine + System.getProperty("line.separator"));
+            }
+            reader.close();
+            writer.close();
+
+            interactionsFile.delete();
+            tempInteractionsFile.renameTo(interactionsFile);
+
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static Lead getLeadInput(Scanner scanner) {
         scanner = new Scanner(System.in);
         Lead lead = new Lead();
 
-        System.out.println("Enter name: ");
+        System.out.println("Enter Name: ");
         String name = scanner.nextLine();
         while(!isValidName(name)){
-            System.out.println("Invalid! \nEnter Email: ");
+            System.out.println("Invalid! \nEnter Name: ");
             name = scanner.nextLine();
         }
         lead.setName(name);
 
         System.out.println("Enter Date of Birth(YYYY/MM/DD): ");
         String dob = scanner.nextLine();
+        while(!isValidDate(dob)){
+            System.out.println("Invalid! \nEnter Date of Birth(YYYY/MM/DD): ");
+            dob = scanner.nextLine();
+        }
         lead.setDob(dob);
 
         System.out.println("Enter Phone Number: ");
         String phone = scanner.nextLine();
         while(!isValidPhoneNumber(phone)){
-            System.out.println("Invalid! \nEnter Email: ");
+            System.out.println("Invalid! \nEnter Phone Number: ");
             phone = scanner.nextLine();
         }
         lead.setPhone(phone);
@@ -223,10 +291,18 @@ public class Main {
 
         System.out.println("Enter Date Of Interaction(YYYY/MM/DD): ");
         String date = scanner.nextLine();
+        while(!isValidDate(date)){
+            System.out.println("Invalid! \nEnter Date of Interaction(YYYY/MM/DD): ");
+            date = scanner.nextLine();
+        }
         interaction.setDate(date);
 
         System.out.println("Enter LeadID: ");
         String leadID = scanner.nextLine();
+        while(!isValidLeadID(leadID)){
+            System.out.println("Invalid! \nEnter LeadID: ");
+            leadID = scanner.nextLine();
+        }
         interaction.setLeadID(leadID);
 
         System.out.println("Enter Means Of Contact: ");
@@ -259,12 +335,22 @@ public class Main {
     }
 
     public static boolean isValidPhoneNumber(String phone ) {
-        String regex = "(0/91)?[7-9][0-9]{9}";
+        String regex = "\\d{8,12}";
         return phone.matches(regex);
     }
 
     public static boolean isValidName(String name ) {
-        String regex = "^[aA-zZ]\\w{5,29}$";
+        String regex = "^[aA-zZ]\\w{2,29}$";
         return name.matches(regex);
+    }
+
+    public static boolean isValidDate(String date) {
+        String regex = "^\\d{4}-\\d{2}-\\d{2}$";
+        return date.matches(regex);
+    }
+
+    public static boolean isValidLeadID(String leadID) {
+        String regex = "^(lead_)\\d{3}$";
+        return leadID.matches(regex);
     }
 }

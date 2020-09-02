@@ -80,7 +80,7 @@ public class Interaction {
             for (int i = 0; i<3-String.valueOf(interactionNum).length();i++) {
                 zeroes += "0";
             }
-            interactionID = "lead_" + zeroes + String.valueOf(interactionNum);
+            interactionID = "inter_" + zeroes + String.valueOf(interactionNum);
 
             return interactionID;
         } catch (FileNotFoundException e) {
