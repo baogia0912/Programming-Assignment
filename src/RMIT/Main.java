@@ -10,8 +10,9 @@ import java.util.Date;
 public class Main {
 
     public static void main(String[] args) {
-        int option = 0;
+        int option;
         do {
+            option = 0;
             Scanner scanner = new Scanner(System.in);
             System.out.println("(1: manage leads), (2: manage interactions), (3: ), (4: Exit)");
             while (!scanner.hasNextInt()) {
@@ -21,48 +22,70 @@ public class Main {
             option = scanner.nextInt();
 
             if (option == 1) {
-                int subOption = 0;
                 do {
+                    option = 0;
                     System.out.println("(1: view leads), (2: add leads), (3: delete leads), (4: update leads), (5: Back)");
                     while (!scanner.hasNextInt()) {
                         System.out.println("That's not a number!");
                         scanner.next(); // this is important!
                     }
-                    subOption = scanner.nextInt();
+                    option = scanner.nextInt();
 
-                    if (subOption == 1) {
+                    if (option == 1) {
+                        option = 0;
                         viewLeads();
-                    } else if (subOption == 2) {
+                    } else if (option == 2) {
+                        option = 0;
                         addLeads(getLeadInput(scanner));
-                    } else if (subOption == 3) {
+                    } else if (option == 3) {
+                        option = 0;
                         deleteLeads();
-                    } else if (subOption == 4) {
-                        updateLeads();
+                    } else if (option == 4) {
+                        option = 0;
+                        scanner = new Scanner(System.in);
+                        System.out.println("Enter LeadID: ");
+                        String leadID = scanner.nextLine();
+                        while(!isValidLeadID(leadID)){
+                            System.out.println("Invalid! \nEnter LeadID: ");
+                            leadID = scanner.nextLine();
+                        }
+                        System.out.println("Enter index (1: name), (2: date), (3: gender), (4: phone#), (5: email), (6: address): ");
+                        String index = scanner.nextLine();
+                        while (!isValidLeadIndex(index)) {
+                            System.out.println("Invalid! \nEnter index (1: name), (2: date), (3: gender), (4: phone#), (5: email), (6: address): ");
+                            index = scanner.nextLine();
+                        }
+                        System.out.println(index);
+
                     }
-                } while (subOption != 5);
+                } while (option != 5);
 
             } else if (option == 2) {
-                int subOption = 0;
                 do {
+                    option = 0;
                     System.out.println("(1: view interactions), (2: add interactions), (3: delete interactions), (4: update interactions), (5: Back)");
                     while (!scanner.hasNextInt()) {
                         System.out.println("That's not a number!");
                         scanner.next(); // this is important!
                     }
-                    subOption = scanner.nextInt();
+                    option = scanner.nextInt();
 
-                    if (subOption == 1) {
+                    if (option == 1) {
+                        option = 0;
                         viewInteractions();
-                    } else if (subOption == 2) {
+                    } else if (option == 2) {
+                        option = 0;
                         addInteractions(getInteractionInput(scanner));
-                    } else if (subOption == 3) {
+                    } else if (option == 3) {
+                        option = 0;
                         deleteInteractions();
-                    } else if (subOption == 4) {
+                    } else if (option == 4) {
+                        option = 0;
                         updateInteractions();
                     }
-                } while (subOption != 5);
+                } while (option != 5);
             } else if (option == 3) {
-                deleteLeads();
+                option = 0;
             }
 
         } while(option !=4);
@@ -90,7 +113,7 @@ public class Main {
             }
             leadsContent.close();
         } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
+            System.out.println("File can not be found");
             e.printStackTrace();
         }
     }
@@ -112,7 +135,7 @@ public class Main {
             }
             leadsContent.close();
         } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
+            System.out.println("File can not be found.");
             e.printStackTrace();
         }
     }
@@ -127,7 +150,7 @@ public class Main {
             bw = new BufferedWriter(fw);
             pw = new PrintWriter(bw);
 
-            pw.println(lead.getId() + "," + lead.getName() + "," + lead.getDob() + "," + lead.isGender() + "," + lead.getPhone() + "," + lead.getEmail() + "," + lead.getAddress());
+            pw.println(lead.nextLeadID() + "," + lead.getName() + "," + lead.getDob() + "," + lead.isGender() + "," + lead.getPhone() + "," + lead.getEmail() + "," + lead.getAddress());
 
             pw.flush();
         } catch (FileNotFoundException e) {
@@ -171,7 +194,6 @@ public class Main {
             BufferedReader reader = new BufferedReader(new FileReader(leadsFile));
             BufferedWriter writer = new BufferedWriter(new FileWriter(tempLeadFile));
 
-            Scanner leadsContent = new Scanner(leadsFile);
             while((currentLine = reader.readLine()) != null) {
                 // Trim newline when comparing with lineToRemove
                 String trimmedLine = currentLine.trim();
@@ -207,7 +229,6 @@ public class Main {
             BufferedReader reader = new BufferedReader(new FileReader(interactionsFile));
             BufferedWriter writer = new BufferedWriter(new FileWriter(tempInteractionsFile));
 
-            Scanner interactionsContent = new Scanner(interactionsFile);
             while((currentLine = reader.readLine()) != null) {
                 // Trim newline when comparing with lineToRemove
                 String trimmedLine = currentLine.trim();
@@ -311,12 +332,16 @@ public class Main {
 
         System.out.println("Enter potential(positive,neutral,negative): ");
         String potential = scanner.nextLine();
+        while(!(potential == "positive" || potential == "neutral" || potential == "negative")){
+            System.out.println("Invalid! \nEnter potential(positive,neutral,negative): ");
+            potential = scanner.nextLine();
+        }
         interaction.setPotential(potential);
 
         return interaction;
     }
 
-    public static void updateLeads() {
+    public static void updateLeads(String leadID, int index, String editedContent) {
 
     }
 
@@ -340,17 +365,27 @@ public class Main {
     }
 
     public static boolean isValidName(String name ) {
-        String regex = "^[aA-zZ]\\w{2,29}$";
+        String regex = "[aA-zZ]\\w{2,29}";
         return name.matches(regex);
     }
 
     public static boolean isValidDate(String date) {
-        String regex = "^\\d{4}-\\d{2}-\\d{2}$";
+        String regex = "^\\d{4}-[1-12]{2}-[1-31]{2}$";
         return date.matches(regex);
     }
 
     public static boolean isValidLeadID(String leadID) {
         String regex = "^(lead_)\\d{3}$";
+        return leadID.matches(regex);
+    }
+
+    public static boolean isValidLeadIndex(String leadID) {
+        String regex = "^[1-6]$";
+        return leadID.matches(regex);
+    }
+
+    public static boolean isValidInteractionIndex(String leadID) {
+        String regex = "^[1-6]$";
         return leadID.matches(regex);
     }
 }

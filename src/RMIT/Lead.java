@@ -1,7 +1,6 @@
 package RMIT;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Date;
@@ -29,12 +28,7 @@ public class Lead {
     }
 
     public String getId() {
-        try {
-            return nextLeadID();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return id;
     }
 
     public void setId(String id) {
@@ -89,20 +83,41 @@ public class Lead {
         this.address = address;
     }
 
-    public static String nextLeadID() throws IOException {
-        long leadNum;
+    public static String nextLeadID() {
         String leadID;
         try {
-            leadNum = Files.lines(Paths.get("leads.csv")).count() + 1;
+            File leadIdTracker = new File("LeadIDTracker.txt");
+            File tempLeadIdTracker = new File("tempLeadIDTracker.txt");
+
+            BufferedReader reader = new BufferedReader(new FileReader(leadIdTracker));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempLeadIdTracker));
+
+            // Get ID number
+            leadID = reader.readLine();
+            String[] tokens = leadID.split("_");
+            int idNum = Integer.valueOf(tokens[1]);
+            int newId = idNum + 1;
 
             String zeroes = "";
-            for (int i = 0; i<3-String.valueOf(leadNum).length();i++) {
+            // Count the number of zeros needed
+            for (int i = 0; i<3-String.valueOf(newId).length();i++) {
                 zeroes += "0";
             }
-            leadID = "lead_" + zeroes + String.valueOf(leadNum);
+
+            writer.write("lead_" + zeroes + newId); // Copy new lead id to the temp file
+            leadID = "lead_" + zeroes + newId;
+
+            reader.close();
+            writer.close();
+
+            // Replace the original tracker file with the temp file containing new id
+            leadIdTracker.delete();
+            tempLeadIdTracker.renameTo(leadIdTracker);
 
             return leadID;
-        } catch (FileNotFoundException e) {
+
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
