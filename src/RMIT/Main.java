@@ -35,13 +35,20 @@ public class Main {
                         addLeads(getLeadInput());
                     } else if (option == 3) {
                         option = 0;
-                        deleteLeads();
+                        scanner = new Scanner(System.in);
+                        System.out.println("Enter LeadID: ");
+                        String leadID = scanner.nextLine();
+                        while (!isValidLeadID(leadID) || !isLeadExist(leadID)) {
+                            System.out.println("Invalid! \nEnter LeadID: ");
+                            leadID = scanner.nextLine();
+                        }
+                        deleteLeads(leadID);
                     } else if (option == 4) {
                         option = 0;
                         scanner = new Scanner(System.in);
                         System.out.println("Enter LeadID: ");
                         String leadID = scanner.nextLine();
-                        while (!isValidLeadID(leadID)) {
+                        while (!isValidLeadID(leadID) || !isLeadExist(leadID)) {
                             System.out.println("Invalid! \nEnter LeadID: ");
                             leadID = scanner.nextLine();
                         }
@@ -130,13 +137,20 @@ public class Main {
                         addInteractions(getInteractionInput());
                     } else if (option == 3) {
                         option = 0;
-                        deleteInteractions();
+                        scanner = new Scanner(System.in);
+                        System.out.println("Enter InteractionID: ");
+                        String interactionID = scanner.nextLine();
+                        while (!isValidInteractionID(interactionID) || !isInteractionExist(interactionID)) {
+                            System.out.println("Invalid! \nEnter InteractionID: ");
+                            interactionID = scanner.nextLine();
+                        }
+                        deleteInteractions(interactionID);
                     } else if (option == 4) {
                         option = 0;
                         scanner = new Scanner(System.in);
                         System.out.println("Enter InteractionID: ");
                         String interactionID = scanner.nextLine();
-                        while (!isValidInteractionID(interactionID)) {
+                        while (!isValidInteractionID(interactionID) || !isInteractionExist(interactionID)) {
                             System.out.println("Invalid! \nEnter InteractionID: ");
                             interactionID = scanner.nextLine();
                         }
@@ -160,7 +174,7 @@ public class Main {
 
                             System.out.println("Enter LeadID: ");
                             String editedContent = scanner.nextLine();
-                            while (!isValidLeadID(editedContent)) {
+                            while (!isValidLeadID(editedContent) || !isLeadExist(editedContent)) {
                                 System.out.println("Invalid! \nEnter LeadID: ");
                                 editedContent = scanner.nextLine();
                             }
@@ -274,11 +288,7 @@ public class Main {
         }
     }
 
-    public static void deleteLeads() {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Enter Lead ID: ");
-        String idRemove = scanner.nextLine();
+    public static void deleteLeads(String leadID) {
         String currentLine;
 
         try {
@@ -291,7 +301,7 @@ public class Main {
             while ((currentLine = reader.readLine()) != null) {
                 // Trim newline when comparing with lineToRemove
                 String trimmedLine = currentLine.trim();
-                if (trimmedLine.contains(idRemove)) continue;
+                if (trimmedLine.contains(leadID)) continue;
                 // Write contents of source file into temp file except for the line with user input id
                 writer.write(currentLine + System.getProperty("line.separator"));
             }
@@ -302,18 +312,14 @@ public class Main {
             boolean renamed = tempLeadFile.renameTo(leadsFile);
 
             if (deleted && renamed) {
-                System.out.println(idRemove + " has been deleted!");
+                System.out.println(leadID + " has been deleted!");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void deleteInteractions() {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Enter  ID: ");
-        String idRemove = scanner.nextLine();
+    public static void deleteInteractions(String interactionID) {
         String currentLine;
 
         try {
@@ -326,7 +332,7 @@ public class Main {
             while ((currentLine = reader.readLine()) != null) {
                 // Trim newline when comparing with lineToRemove
                 String trimmedLine = currentLine.trim();
-                if (trimmedLine.contains(idRemove)) continue;
+                if (trimmedLine.contains(interactionID)) continue;
                 // Write contents of source file into temp file except for the line with user input id
                 writer.write(currentLine + System.getProperty("line.separator"));
             }
@@ -337,7 +343,7 @@ public class Main {
             boolean renamed = tempInteractionsFile.renameTo(interactionsFile);
 
             if (deleted && renamed) {
-                System.out.println(idRemove + " has been deleted!");
+                System.out.println(interactionID + " has been deleted!");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -414,7 +420,7 @@ public class Main {
 
         System.out.println("Enter LeadID: ");
         String leadID = scanner.nextLine();
-        while (!isValidLeadID(leadID)) {
+        while (!isValidLeadID(leadID) || !isLeadExist(leadID)) {
             System.out.println("Invalid! \nEnter LeadID: ");
             leadID = scanner.nextLine();
         }
@@ -526,6 +532,8 @@ public class Main {
         }
     }
 
+    static
+
     static boolean isValidEmail(String email) {
         String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
         return email.matches(regex);
@@ -584,10 +592,60 @@ public class Main {
     }
 
     public static boolean isLeadExist(String leadID) {
-        return false;
+        File lead = new File("leads.csv");
+
+        int count = 0;
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(lead));
+
+            String currentLine;
+            while ((currentLine = reader.readLine()) != null) {
+                String[] tokens = currentLine.split(",");
+                // Find the cell
+                if (leadID.equalsIgnoreCase(tokens[0])) {
+                    count = 1;
+                } else {
+                    count = 0;
+                }
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (count == 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public static boolean isInteractionExist(String interactionID) {
-        return false;
+        File interaction = new File("interactions.csv");
+
+        int count = 0;
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(interaction));
+
+            String currentLine;
+            while ((currentLine = reader.readLine()) != null) {
+                String[] tokens = currentLine.split(",");
+                // Find the cell
+                if (interactionID.equalsIgnoreCase(tokens[0])) {
+                    count = 1;
+                } else {
+                    count = 0;
+                }
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (count == 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
