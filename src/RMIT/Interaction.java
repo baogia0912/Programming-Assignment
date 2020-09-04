@@ -1,15 +1,11 @@
 package RMIT;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Date;
+import java.io.*;
 
 public class Interaction {
     private String id;
     private String date;
-    private String leadID;
+    private String interactionID;
     private String meansOfContact;
     private String potential;
 
@@ -17,10 +13,10 @@ public class Interaction {
 
     }
 
-    public Interaction(String id, String date, String leadID, String meansOfContact, String potential) {
+    public Interaction(String id, String date, String interactionID, String meansOfContact, String potential) {
         this.id = id;
         this.date = date;
-        this.leadID = leadID;
+        this.interactionID = interactionID;
         this.meansOfContact = meansOfContact;
         this.potential = potential;
     }
@@ -28,7 +24,7 @@ public class Interaction {
     public String getId() {
         try {
             return nextInteractionID();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -47,11 +43,11 @@ public class Interaction {
     }
 
     public String getLeadID() {
-        return leadID;
+        return interactionID;
     }
 
-    public void setLeadID(String leadID) {
-        this.leadID = leadID;
+    public void setLeadID(String interactionID) {
+        this.interactionID = interactionID;
     }
 
     public String getMeansOfContact() {
@@ -70,20 +66,39 @@ public class Interaction {
         this.potential = potential;
     }
 
-    public static String nextInteractionID() throws IOException {
-        long interactionNum;
+    public static String nextInteractionID() {
         String interactionID;
         try {
-            interactionNum = Files.lines(Paths.get("interactions.csv")).count() + 1;
+            File interactionIDTracker = new File("interactionIDTracker.txt");
+            File tempinteractionIDTracker = new File("tempinteractionIDTracker.txt");
 
-            String zeroes = "";
-            for (int i = 0; i<3-String.valueOf(interactionNum).length();i++) {
-                zeroes += "0";
-            }
-            interactionID = "inter_" + zeroes + String.valueOf(interactionNum);
+            BufferedReader reader = new BufferedReader(new FileReader(interactionIDTracker));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempinteractionIDTracker));
+
+            // Get ID number
+            interactionID = reader.readLine();
+            String[] tokens = interactionID.split("_");
+            int idNum = Integer.parseInt(tokens[1]);
+            int newId = idNum + 1;
+
+            StringBuilder zeroes = new StringBuilder();
+            // Count the number of zeros needed
+            zeroes.append("0".repeat(Math.max(0, 3 - String.valueOf(newId).length())));
+
+            writer.write("inter_" + zeroes + newId); // Copy new lead id to the temp file
+            interactionID = "inter_" + zeroes + newId;
+
+            reader.close();
+            writer.close();
+
+            // Replace the original tracker file with the temp file containing new id
+            interactionIDTracker.delete();
+            tempinteractionIDTracker.renameTo(interactionIDTracker);
 
             return interactionID;
-        } catch (FileNotFoundException e) {
+
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
