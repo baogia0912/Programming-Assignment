@@ -1,13 +1,16 @@
 package RMIT;
 
+import javax.swing.*;
 import java.io.*;
 import java.util.Scanner;
 
 public class ManageLeads {
     private final Validation validation;
+    private final ManageInteraction manageInteraction;
 
-    public ManageLeads(Validation validation) {
+    public ManageLeads(Validation validation, ManageInteraction manageInteraction) {
         this.validation = validation;
+        this.manageInteraction = manageInteraction;
     }
 
     public void viewLeads() {
@@ -53,24 +56,23 @@ public class ManageLeads {
         }
     }
 
-    public void deleteLeads(String leadID) {
+    public void deleteLeads(String leadID, boolean deleteInteraction) {
         String currentLine;
-
         try {
             File leadsFile = new File("leads.csv");
             File tempLeadFile = new File("temp.csv");
 
-            BufferedReader reader = new BufferedReader(new FileReader(leadsFile));
+            BufferedReader leadsReader = new BufferedReader(new FileReader(leadsFile));
             BufferedWriter writer = new BufferedWriter(new FileWriter(tempLeadFile));
 
-            while ((currentLine = reader.readLine()) != null) {
+            while ((currentLine = leadsReader.readLine()) != null) {
                 // Trim newline when comparing with lineToRemove
                 String trimmedLine = currentLine.trim();
                 if (trimmedLine.contains(leadID)) continue;
                 // Write contents of source file into temp file except for the line with user input id
                 writer.write(currentLine + System.getProperty("line.separator"));
             }
-            reader.close();
+            leadsReader.close();
             writer.close();
 
             boolean deleted = leadsFile.delete();
@@ -78,6 +80,28 @@ public class ManageLeads {
 
             if (deleted && renamed) {
                 System.out.println(leadID + " has been deleted!");
+            }
+
+            if (deleteInteraction) {
+                File interactionFile = new File("interactions.csv");
+                BufferedReader interactionsReader = new BufferedReader(new FileReader(interactionFile));
+
+                String[] interactionToRemove = new String[1000];
+                int index = 0;
+                while ((currentLine = interactionsReader.readLine()) != null) {
+                    // Trim newline when comparing with lineToRemove
+                    String trimmedLine = currentLine.trim();
+                    if (trimmedLine.contains(leadID)) {
+                        String[] tokens = currentLine.split(",");
+                        interactionToRemove[index] = tokens[0];
+                        index += 1;
+                    }
+                }
+                for (int i = 0; i < index; i++) {
+                    manageInteraction.deleteInteractions(interactionToRemove[i]);
+                }
+
+                interactionsReader.close();
             }
         } catch (Exception e) {
             e.printStackTrace();

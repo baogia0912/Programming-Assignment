@@ -50,7 +50,13 @@ public class Menu {
                             System.out.println("Invalid! \nEnter LeadID: ");
                             leadID = scanner.nextLine();
                         }
-                        manageLeads.deleteLeads(leadID);
+                        System.out.println("Do you want to delete interaction for this lead as well?(yes: true), (no = false): ");
+                        String deleteInteractions = scanner.nextLine();
+                        while (!deleteInteractions.equalsIgnoreCase("true") && !deleteInteractions.equalsIgnoreCase("false")) {
+                            System.out.println("Invalid! \n(true/false): ");
+                            deleteInteractions = scanner.nextLine();
+                        }
+                        manageLeads.deleteLeads(leadID, Boolean.parseBoolean(deleteInteractions));
                     } else if (option == 4) {
                         option = 0;
                         scanner = new Scanner(System.in);
