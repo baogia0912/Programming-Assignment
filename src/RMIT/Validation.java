@@ -66,7 +66,6 @@ public class Validation {
     public boolean isLeadExist(String leadID) {
         File lead = new File("leads.csv");
 
-        int count = 0;
         try {
             BufferedReader reader = new BufferedReader(new FileReader(lead));
 
@@ -75,23 +74,20 @@ public class Validation {
                 String[] tokens = currentLine.split(",");
                 // Find the cell
                 if (leadID.equalsIgnoreCase(tokens[0])) {
-                    count = 1;
-                } else {
-                    count = 0;
+                    return true;
                 }
-
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return count == 1;
+        System.out.println("Lead's ID does not exist!");
+        return false;
     }
 
     public boolean isInteractionExist(String interactionID) {
         File interaction = new File("interactions.csv");
 
-        int count = 0;
         try {
             BufferedReader reader = new BufferedReader(new FileReader(interaction));
 
@@ -100,16 +96,14 @@ public class Validation {
                 String[] tokens = currentLine.split(",");
                 // Find the cell
                 if (interactionID.equalsIgnoreCase(tokens[0])) {
-                    count = 1;
-                } else {
-                    count = 0;
+                    return true;
                 }
-
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return count == 1;
+        System.out.println("Interaction's ID does not exist!");
+        return false;
     }
 }

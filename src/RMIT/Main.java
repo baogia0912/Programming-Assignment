@@ -5,6 +5,7 @@ public class Main {
         Validation validation = new Validation();
         ManageLeads manageLeads = new ManageLeads(validation);
         ManageInteraction manageInteraction = new ManageInteraction(validation);
-        new Menu(validation, manageLeads, manageInteraction).menu();
+        Summary summary = new Summary();
+        new Menu(validation, manageLeads, manageInteraction, summary).menu();
     }
 }
