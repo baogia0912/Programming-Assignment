@@ -1,14 +1,13 @@
 package RMIT;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.Period;
 
 public class Lead {
     private String id;
     private String name;
-    private String dob;
+    private LocalDate dob;
     private boolean gender;
     private String phone;
     private String email;
@@ -17,7 +16,7 @@ public class Lead {
     public Lead() {
 
     }
-    public Lead(String id, String name, String dob, boolean gender, String phone, String email, String address) {
+    public Lead(String id, String name, LocalDate dob, boolean gender, String phone, String email, String address) {
         this.id = id;
         this.name = name;
         this.dob = dob;
@@ -43,11 +42,11 @@ public class Lead {
         this.name = name;
     }
 
-    public String getDob() {
+    public LocalDate getDob() {
         return dob;
     }
 
-    public void setDob(String dob) {
+    public void setDob(LocalDate dob) {
         this.dob = dob;
     }
 
@@ -122,4 +121,13 @@ public class Lead {
         }
         return null;
     }
+
+    public int getAge(){
+        LocalDate dob = this.dob;
+        LocalDate now = LocalDate.now();
+        Period diff = Period.between(dob, now);
+        int age = diff.getYears();
+        return age;
+    }
+
 }

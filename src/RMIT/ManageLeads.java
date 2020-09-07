@@ -2,6 +2,7 @@ package RMIT;
 
 import javax.swing.*;
 import java.io.*;
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class ManageLeads {
@@ -170,11 +171,13 @@ public class ManageLeads {
 
         System.out.println("Enter Date of Birth(YYYY-MM-DD): ");
         String dob = scanner.nextLine();
+        LocalDate d = LocalDate.parse(dob);
         while (!validation.isValidDate(dob)) {
             System.out.println("Invalid! \nEnter Date of Birth(YYYY-MM-DD): ");
             dob = scanner.nextLine();
+            d = LocalDate.parse(dob);
         }
-        lead.setDob(dob);
+        lead.setDob(d);
 
         System.out.println("Enter Phone Number: ");
         String phone = scanner.nextLine();
