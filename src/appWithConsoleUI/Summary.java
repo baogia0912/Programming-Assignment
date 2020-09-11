@@ -1,10 +1,9 @@
-package RMIT;
+package appWithConsoleUI;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.Period;
 
 public class Summary {
     public void ageSummary() {
@@ -84,7 +83,8 @@ public class Summary {
         LocalDate edDate = LocalDate.parse(endDate);
 
         try {
-            BufferedReader reader = new BufferedReader(new FileReader("interactions.csv"));
+            BufferedReader reader = new BufferedReader(new FileReader("interactions" +
+                    ".csv"));
             String currentLine;
             while ((currentLine = reader.readLine()) != null) {
                 String[] tokens = currentLine.split(",");

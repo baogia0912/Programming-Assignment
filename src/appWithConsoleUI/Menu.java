@@ -1,4 +1,4 @@
-package RMIT;
+package appWithConsoleUI;
 
 import java.util.Scanner;
 
@@ -60,10 +60,10 @@ public class Menu {
                     } else if (option == 4) {
                         option = 0;
                         scanner = new Scanner(System.in);
-                        System.out.println("Enter LeadID: ");
+                        System.out.println("Enter LeadID(lead_XXX): ");
                         String leadID = scanner.nextLine();
                         while (!validation.isValidLeadID(leadID) || !validation.isLeadExist(leadID)) {
-                            System.out.println("Invalid! \nEnter LeadID: ");
+                            System.out.println("Invalid! \nEnter LeadID(lead_XXX): ");
                             leadID = scanner.nextLine();
                         }
                         System.out.println("Enter index (1: name), (2: date), (3: gender), (4: phone#), (5: email), (6: address): ");
@@ -76,7 +76,7 @@ public class Menu {
                             System.out.println("Enter Name: ");
                             String editedContent = scanner.nextLine();
                             while (!validation.isValidName(editedContent)) {
-                                System.out.println("Invalid! \nEnter Name: ");
+                                System.out.println("Invalid! \nNo numbers or special characters: ");
                                 editedContent = scanner.nextLine();
                             }
                             manageLeads.updateLeads(leadID, Integer.parseInt(index), editedContent);
@@ -86,7 +86,7 @@ public class Menu {
                             System.out.println("Enter Date of Birth(YYYY-MM-DD): ");
                             String editedContent = scanner.nextLine();
                             while (!validation.isValidDate(editedContent)) {
-                                System.out.println("Invalid! \nEnter Date of Birth(YYYY-MM-DD): ");
+                                System.out.println("Invalid! \nFollow the format(YYYY-MM-DD): ");
                                 editedContent = scanner.nextLine();
                             }
                             manageLeads.updateLeads(leadID, Integer.parseInt(index), editedContent);
@@ -106,7 +106,7 @@ public class Menu {
                             System.out.println("Enter Phone Number: ");
                             String editedContent = scanner.nextLine();
                             while (!validation.isValidPhoneNumber(editedContent)) {
-                                System.out.println("Invalid! \nEnter Phone Number: ");
+                                System.out.println("Invalid! \nOnly digits are accepted: ");
                                 editedContent = scanner.nextLine();
                             }
                             manageLeads.updateLeads(leadID, Integer.parseInt(index), editedContent);
@@ -198,6 +198,10 @@ public class Menu {
 
                             System.out.println("Enter Means Of Contact: ");
                             String editedContent = scanner.nextLine();
+                            while (!validation.isValidMeansOfContact(editedContent) || !validation.isValidMeansOfContact(editedContent)) {
+                                System.out.println("Invalid! \nMeans can not contains special characters: ");
+                                editedContent = scanner.nextLine();
+                            }
                             manageInteraction.updateInteractions(interactionID, Integer.parseInt(index), editedContent);
 
                         } else if (Integer.parseInt(index) == 4) {

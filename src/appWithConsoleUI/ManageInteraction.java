@@ -1,4 +1,4 @@
-package RMIT;
+package appWithConsoleUI;
 
 import java.io.*;
 import java.util.Scanner;
@@ -142,16 +142,20 @@ public class ManageInteraction {
         }
         interaction.setDate(date);
 
-        System.out.println("Enter LeadID: ");
+        System.out.println("Enter LeadID(lead_XXX): ");
         String leadID = scanner.nextLine();
         while (!validation.isValidLeadID(leadID) || !validation.isLeadExist(leadID)) {
-            System.out.println("Invalid! \nEnter LeadID: ");
+            System.out.println("Invalid! \nFollow the format(lead_XXX): ");
             leadID = scanner.nextLine();
         }
         interaction.setLeadID(leadID);
 
         System.out.println("Enter Means Of Contact: ");
         String means = scanner.nextLine();
+        while (!validation.isValidMeansOfContact(means) || !validation.isValidMeansOfContact(means)) {
+            System.out.println("Invalid! \nMeans can not contains special characters: ");
+            means = scanner.nextLine();
+        }
         interaction.setMeansOfContact(means);
 
         System.out.println("Enter potential(positive,neutral,negative): ");

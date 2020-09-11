@@ -1,4 +1,4 @@
-package RMIT;
+package appWithConsoleUI;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,8 +25,13 @@ public class Validation {
     }
 
     public boolean isValidName(String name) {
-        String regex = "[aA-zZ]\\w{2,29}";
+        String regex = "([a-zA-Z]+|[a-zA-Z]+\\s[a-zA-Z])+";
         return name.matches(regex);
+    }
+
+    public boolean isValidMeansOfContact(String means) {
+        String regex = "([a-zA-Z0-9]+|[a-zA-Z0-9]+\\s[a-zA-Z0-9])+";
+        return means.matches(regex);
     }
 
     public boolean isValidDate(String date) {

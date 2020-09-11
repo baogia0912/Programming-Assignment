@@ -1,4 +1,4 @@
-package RMIT;
+package appWithConsoleUI;
 
 import java.io.*;
 import java.time.LocalDate;

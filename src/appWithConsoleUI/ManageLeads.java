@@ -1,6 +1,5 @@
-package RMIT;
+package appWithConsoleUI;
 
-import javax.swing.*;
 import java.io.*;
 import java.time.LocalDate;
 import java.util.Scanner;
@@ -164,7 +163,7 @@ public class ManageLeads {
         System.out.println("Enter Name: ");
         String name = scanner.nextLine();
         while (!validation.isValidName(name)) {
-            System.out.println("Invalid! \nEnter Name: ");
+            System.out.println("Invalid! \nNo numbers or special characters: ");
             name = scanner.nextLine();
         }
         lead.setName(name);
