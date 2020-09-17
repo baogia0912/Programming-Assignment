@@ -1,4 +1,4 @@
-package appWithConsoleUI;
+package AppWithConsoleUI;
 
 import java.io.*;
 import java.util.Scanner;
@@ -11,6 +11,7 @@ public class ManageInteraction {
     }
 
     public void viewInteractions() {
+        //display interactions from interactions.csv
         try {
             File leadsFile = new File("interactions.csv");
             Scanner leadsContent = new Scanner(leadsFile);
@@ -33,6 +34,7 @@ public class ManageInteraction {
     }
 
     public void addInteractions(Interaction interaction) {
+        //add interactions to interactions.csv
         FileWriter fw;
         BufferedWriter bw;
         PrintWriter pw;
@@ -42,6 +44,7 @@ public class ManageInteraction {
             bw = new BufferedWriter(fw);
             pw = new PrintWriter(bw);
 
+            //get interaction's information and put it together in a line
             pw.println(interaction.getId() + "," + interaction.getDate() + "," + interaction.getLeadID() + "," + interaction.getMeansOfContact() + "," + interaction.getPotential());
 
             pw.flush();
@@ -51,6 +54,7 @@ public class ManageInteraction {
     }
 
     public void deleteInteractions(String interactionID) {
+        //delete an interaction from interactions.csv
         String currentLine;
 
         try {
@@ -82,6 +86,7 @@ public class ManageInteraction {
     }
 
     public void updateInteractions(String interactionID, int index, String editedContent) {
+        //update a parameter of an interaction in interactions.csv file
         File interactionsFile = new File("interactions.csv");
         File tempInteractionsFile = new File("editedInteractions.csv");
 
@@ -131,9 +136,11 @@ public class ManageInteraction {
     }
 
     public Interaction getInteractionInput() {
+        //getting user input before updating an interaction
         Scanner scanner = new Scanner(System.in);
         Interaction interaction = new Interaction();
 
+        //getting and validating date input
         System.out.println("Enter Date Of Interaction(YYYY-MM-DD): ");
         String date = scanner.nextLine();
         while (!validation.isValidDate(date)) {
@@ -142,6 +149,7 @@ public class ManageInteraction {
         }
         interaction.setDate(date);
 
+        //getting and validating lead ID input
         System.out.println("Enter LeadID(lead_XXX): ");
         String leadID = scanner.nextLine();
         while (!validation.isValidLeadID(leadID) || !validation.isLeadExist(leadID)) {
@@ -150,6 +158,7 @@ public class ManageInteraction {
         }
         interaction.setLeadID(leadID);
 
+        //getting and validating means of cantact input
         System.out.println("Enter Means Of Contact: ");
         String means = scanner.nextLine();
         while (!validation.isValidMeansOfContact(means) || !validation.isValidMeansOfContact(means)) {
@@ -158,6 +167,7 @@ public class ManageInteraction {
         }
         interaction.setMeansOfContact(means);
 
+        //getting and validating potential input
         System.out.println("Enter potential(positive,neutral,negative): ");
         String potential = scanner.nextLine();
         while (!(potential.equalsIgnoreCase("positive") || potential.equalsIgnoreCase("neutral") || potential.equalsIgnoreCase("negative"))) {

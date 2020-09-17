@@ -1,4 +1,4 @@
-package appWithConsoleUI;
+package AppWithGUI;
 
 import java.io.*;
 
@@ -70,10 +70,10 @@ public class Interaction {
         String interactionID;
         try {
             File interactionIDTracker = new File("interactionIDTracker.txt");
-            File tempinteractionIDTracker = new File("tempinteractionIDTracker.txt");
+            File tempInteractionIDTracker = new File("tempinteractionIDTracker.txt");
 
             BufferedReader reader = new BufferedReader(new FileReader(interactionIDTracker));
-            BufferedWriter writer = new BufferedWriter(new FileWriter(tempinteractionIDTracker));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempInteractionIDTracker));
 
             // Get ID number
             interactionID = reader.readLine();
@@ -93,7 +93,7 @@ public class Interaction {
 
             // Replace the original tracker file with the temp file containing new id
             interactionIDTracker.delete();
-            tempinteractionIDTracker.renameTo(interactionIDTracker);
+            tempInteractionIDTracker.renameTo(interactionIDTracker);
 
             return interactionID;
 

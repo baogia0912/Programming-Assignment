@@ -1,4 +1,4 @@
-package appWithGUI;
+package AppWithGUI;
 
 public class Summary {
 }

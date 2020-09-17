@@ -1,4 +1,4 @@
-package appWithConsoleUI;
+package AppWithConsoleUI;
 
 import java.util.Scanner;
 
@@ -17,7 +17,7 @@ public class Menu {
 
     public void menu() {
         int option;
-        do {
+        do {//display menu and record user's option with validation
             Scanner scanner = new Scanner(System.in);
             System.out.println("(1: manage leads), (2: manage interactions), (3: view summary), (4: Exit)");
             while (!scanner.hasNextInt()) {
@@ -26,8 +26,8 @@ public class Menu {
             }
             option = scanner.nextInt();
 
-            if (option == 1) {
-                do {
+            if (option == 1) {//manage leads
+                do {//display menu for managing leads and record user's option with validation
                     System.out.println("(1: view leads), (2: add leads), (3: delete leads), (4: update leads), (5: Back)");
                     while (!scanner.hasNextInt()) {
                         System.out.println("That's not a number!");
@@ -35,21 +35,23 @@ public class Menu {
                     }
                     option = scanner.nextInt();
 
-                    if (option == 1) {
+                    if (option == 1) {//view leads
                         option = 0;
                         manageLeads.viewLeads();
-                    } else if (option == 2) {
+                    } else if (option == 2) {//add new lead
                         option = 0;
                         manageLeads.addLeads(manageLeads.getLeadInput());
-                    } else if (option == 3) {
+                    } else if (option == 3) {//delete an existing lead
                         option = 0;
                         scanner = new Scanner(System.in);
+                        //get a validated lead ID
                         System.out.println("Enter LeadID: ");
                         String leadID = scanner.nextLine();
                         while (!validation.isValidLeadID(leadID) || !validation.isLeadExist(leadID)) {
                             System.out.println("Invalid! \nEnter LeadID: ");
                             leadID = scanner.nextLine();
                         }
+                        //asking for option to delete interaction connected to the lead
                         System.out.println("Do you want to delete interaction for this lead as well?(yes: true), (no = false): ");
                         String deleteInteractions = scanner.nextLine();
                         while (!deleteInteractions.equalsIgnoreCase("true") && !deleteInteractions.equalsIgnoreCase("false")) {
@@ -57,8 +59,9 @@ public class Menu {
                             deleteInteractions = scanner.nextLine();
                         }
                         manageLeads.deleteLeads(leadID, Boolean.parseBoolean(deleteInteractions));
-                    } else if (option == 4) {
+                    } else if (option == 4) {//update a lead, field and what it going to be edited to
                         option = 0;
+                        //getting leadID that needs to be update
                         scanner = new Scanner(System.in);
                         System.out.println("Enter LeadID(lead_XXX): ");
                         String leadID = scanner.nextLine();
@@ -66,12 +69,14 @@ public class Menu {
                             System.out.println("Invalid! \nEnter LeadID(lead_XXX): ");
                             leadID = scanner.nextLine();
                         }
+                        //getting parameter to be update
                         System.out.println("Enter index (1: name), (2: date), (3: gender), (4: phone#), (5: email), (6: address): ");
                         String index = scanner.nextLine();
                         while (!validation.isValidLeadIndex(index)) {
                             System.out.println("Invalid! \nEnter index (1: name), (2: date), (3: gender), (4: phone#), (5: email), (6: address): ");
                             index = scanner.nextLine();
                         }
+                        //getting edited content
                         if (Integer.parseInt(index) == 1) {
                             System.out.println("Enter Name: ");
                             String editedContent = scanner.nextLine();
@@ -134,8 +139,8 @@ public class Menu {
                 } while (option != 5);
                 option = 0;
 
-            } else if (option == 2) {
-                do {
+            } else if (option == 2) {//manage interactions
+                do {//display options to manage interactions
                     System.out.println("(1: view interactions), (2: add interactions), (3: delete interactions), (4: update interactions), (5: Back)");
                     while (!scanner.hasNextInt()) {
                         System.out.println("That's not a number!");
@@ -143,13 +148,13 @@ public class Menu {
                     }
                     option = scanner.nextInt();
 
-                    if (option == 1) {
+                    if (option == 1) {//view interactions
                         option = 0;
                         manageInteraction.viewInteractions();
-                    } else if (option == 2) {
+                    } else if (option == 2) {//add new interactions with validated input
                         option = 0;
                         manageInteraction.addInteractions(manageInteraction.getInteractionInput());
-                    } else if (option == 3) {
+                    } else if (option == 3) {//delete existing interaction with a validated interaction ID input
                         option = 0;
                         scanner = new Scanner(System.in);
                         System.out.println("Enter InteractionID: ");
@@ -159,8 +164,9 @@ public class Menu {
                             interactionID = scanner.nextLine();
                         }
                         manageInteraction.deleteInteractions(interactionID);
-                    } else if (option == 4) {
+                    } else if (option == 4) {//update an existing interaction, field and edited content
                         option = 0;
+                        //getting an existing interaction ID
                         scanner = new Scanner(System.in);
                         System.out.println("Enter InteractionID: ");
                         String interactionID = scanner.nextLine();
@@ -168,12 +174,14 @@ public class Menu {
                             System.out.println("Invalid! \nEnter InteractionID: ");
                             interactionID = scanner.nextLine();
                         }
+                        //getting option for the updating parameter
                         System.out.println("Enter index (1: date), (2: leadID), (3: means of contact), (4: potential)");
                         String index = scanner.nextLine();
                         while (!validation.isValidInteractionIndex(index)) {
                             System.out.println("Invalid! \nEnter index (1: date), (2: leadID), (3: means of contact), (4: potential)");
                             index = scanner.nextLine();
                         }
+                        //getting edited content
                         if (Integer.parseInt(index) == 1) {
 
                             System.out.println("Enter Date of Interaction(YYYY-MM-DD): ");
@@ -216,19 +224,19 @@ public class Menu {
                     }
                 } while (option != 5);
                 option = 0;
-            } else if (option == 3) {
+            } else if (option == 3) {//view summaries
                 option = 0;
-                do {
+                do {//getting options for which summary to view
                     System.out.println("(1: Age summary), (2: Potential summary), (3: Interaction summary), (4: Back)");
                     while (!scanner.hasNextInt()) {
                         System.out.println("That's not a number!");
                         scanner.next(); // this is important!
                     }
                     option = scanner.nextInt();
-                    if (option == 1) {
+                    if (option == 1) {//age summary
                         option = 0;
                         summary.ageSummary();
-                    } else if (option == 2) {
+                    } else if (option == 2) {//getting date for potential summary and view it
                         option = 0;
                         scanner = new Scanner(System.in);
                         System.out.println("Enter start date(YYYY-MM-DD): ");
@@ -244,7 +252,7 @@ public class Menu {
                             endDate = scanner.nextLine();
                         }
                         summary.potentialSummary(startDate, endDate);
-                    } else if (option == 3) {
+                    } else if (option == 3) {//getting date for interactions summary and view it
                         option = 0;
                         scanner = new Scanner(System.in);
                         System.out.println("Enter start date(YYYY-MM-DD): ");

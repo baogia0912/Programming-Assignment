@@ -1,4 +1,4 @@
-package appWithConsoleUI;
+package AppWithConsoleUI;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -27,7 +27,13 @@ public class Lead {
     }
 
     public String getId() {
-        return id;
+        //calling the next ID method
+        try {
+            return nextLeadID();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void setId(String id) {
@@ -83,6 +89,7 @@ public class Lead {
     }
 
     public static String nextLeadID() {
+        //finding next lead ID
         String leadID;
         try {
             File leadIdTracker = new File("LeadIDTracker.txt");

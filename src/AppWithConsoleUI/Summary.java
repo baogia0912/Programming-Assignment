@@ -1,4 +1,4 @@
-package appWithConsoleUI;
+package AppWithConsoleUI;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

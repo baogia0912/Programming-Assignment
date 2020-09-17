@@ -1,4 +1,4 @@
-package appWithConsoleUI;
+package AppWithConsoleUI;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -14,6 +14,7 @@ public class ManageLeads {
     }
 
     public void viewLeads() {
+        //display leads from leads.csv file
         try {
             File leadsFile = new File("leads.csv");
             Scanner leadsContent = new Scanner(leadsFile);
@@ -39,6 +40,7 @@ public class ManageLeads {
     }
 
     public void addLeads(Lead lead) {
+        //add a lead to leads.csv file as a new line
         FileWriter fw;
         BufferedWriter bw;
         PrintWriter pw;
@@ -57,6 +59,7 @@ public class ManageLeads {
     }
 
     public void deleteLeads(String leadID, boolean deleteInteraction) {
+        //delete a lead containing the lead ID
         String currentLine;
         try {
             File leadsFile = new File("leads.csv");
@@ -109,6 +112,7 @@ public class ManageLeads {
     }
 
     public void updateLeads(String leadID, int index, String editedContent) {
+        //update a parameter of a lead in leads.csv file
         File leadsFile = new File("leads.csv");
         File tempLeadsFile = new File("editedLeads.csv");
 
@@ -157,9 +161,11 @@ public class ManageLeads {
     }
 
     public Lead getLeadInput() {
+        //getting user input before updating a lead
         Scanner scanner = new Scanner(System.in);
         Lead lead = new Lead();
 
+        //getting and validating name input
         System.out.println("Enter Name: ");
         String name = scanner.nextLine();
         while (!validation.isValidName(name)) {
@@ -168,6 +174,7 @@ public class ManageLeads {
         }
         lead.setName(name);
 
+        //getting and validating date input
         System.out.println("Enter Date of Birth(YYYY-MM-DD): ");
         String dob = scanner.nextLine();
         LocalDate d = LocalDate.parse(dob);
@@ -178,6 +185,7 @@ public class ManageLeads {
         }
         lead.setDob(d);
 
+        //getting and validating phone number input
         System.out.println("Enter Phone Number: ");
         String phone = scanner.nextLine();
         while (!validation.isValidPhoneNumber(phone)) {
@@ -186,6 +194,7 @@ public class ManageLeads {
         }
         lead.setPhone(phone);
 
+        //getting and validating email input
         System.out.println("Enter Email: ");
         String email = scanner.nextLine();
         while (!validation.isValidEmail(email)) {
@@ -194,7 +203,7 @@ public class ManageLeads {
         }
         lead.setEmail(email);
 
-
+        //getting and validating gender input
         System.out.println("Enter Gender(True = Male/False = Female): ");
         String gender = scanner.nextLine();
         while (!gender.equalsIgnoreCase("true") && !gender.equalsIgnoreCase("false")) {
@@ -203,6 +212,7 @@ public class ManageLeads {
         }
         lead.setGender(Boolean.parseBoolean(gender));
 
+        //getting and validating address input
         System.out.println("Enter Address ");
         String address = scanner.nextLine();
         while (!validation.isValidAddress(address)) {
