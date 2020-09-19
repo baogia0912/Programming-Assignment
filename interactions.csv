@@ -1,14 +1,13 @@
 inter_001,2020-01-20,lead_001,email,positive
+inter_002,2020-02-22,lead_002,face to face,neutral
 inter_003,2020-03-22,lead_003,phone,negative
 inter_004,2020-04-22,lead_004,facebook,positive
-inter_005,2020-05-22,lead_005,fanpage,neutral
-inter_006,2020-06-22,lead_006,face to face,positive
+inter_006,2020-06-22,lead_006,face to face,negative
 inter_007,2020-07-22,lead_007,phone,positive
 inter_008,2020-08-22,lead_008,facebook,neutral
 inter_009,2020-09-22,lead_009,email,negative
 inter_010,2020-10-22,lead_010,fanpage,positive
 inter_011,2020-11-22,lead_001,phone,neutral
+inter_012,2020-12-22,lead_002,email,negative
 inter_013,2020-01-01,lead_003,facebook,positive
-inter_014,2020-01-02,lead_004,fanpage,neutral
-inter_015,2020-01-03,lead_005,facebook,negative
-inter_016,2020-08-16,lead_014,qwrqwer13$@$@Q$,neutral
+inter_014,1234-11-11,lead_004,vawegawe,positive

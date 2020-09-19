@@ -18,6 +18,7 @@ public class Menu {
     public void menu() {
         int option;
         do {//display menu and record user's option with validation
+            option = 0;
             Scanner scanner = new Scanner(System.in);
             System.out.println("(1: manage leads), (2: manage interactions), (3: view summary), (4: Exit)");
             while (!scanner.hasNextInt()) {
@@ -45,20 +46,24 @@ public class Menu {
                         option = 0;
                         scanner = new Scanner(System.in);
                         //get a validated lead ID
-                        System.out.println("Enter LeadID: ");
+                        System.out.println("Enter LeadID(lead_XXX): ");
                         String leadID = scanner.nextLine();
                         while (!validation.isValidLeadID(leadID) || !validation.isLeadExist(leadID)) {
-                            System.out.println("Invalid! \nEnter LeadID: ");
+                            System.out.println("Invalid! \nEnter LeadID(lead_XXX): ");
                             leadID = scanner.nextLine();
                         }
                         //asking for option to delete interaction connected to the lead
-                        System.out.println("Do you want to delete interaction for this lead as well?(yes: true), (no = false): ");
-                        String deleteInteractions = scanner.nextLine();
-                        while (!deleteInteractions.equalsIgnoreCase("true") && !deleteInteractions.equalsIgnoreCase("false")) {
-                            System.out.println("Invalid! \n(true/false): ");
-                            deleteInteractions = scanner.nextLine();
+                        if (validation.isLeadHaveInteraction(leadID)) {
+                            System.out.println("Do you want to delete interaction for this lead as well?(yes: true), (no = false): ");
+                            String deleteInteractions = scanner.nextLine();
+                            while (!deleteInteractions.equalsIgnoreCase("true") && !deleteInteractions.equalsIgnoreCase("false")) {
+                                System.out.println("Invalid! \n(true/false): ");
+                                deleteInteractions = scanner.nextLine();
+                            }
+                            manageLeads.deleteLeads(leadID, Boolean.parseBoolean(deleteInteractions));
+                        } else {
+                            manageLeads.deleteLeads(leadID, false);
                         }
-                        manageLeads.deleteLeads(leadID, Boolean.parseBoolean(deleteInteractions));
                     } else if (option == 4) {//update a lead, field and what it going to be edited to
                         option = 0;
                         //getting leadID that needs to be update
@@ -130,7 +135,7 @@ public class Menu {
                             System.out.println("Enter Address ");
                             String editedContent = scanner.nextLine();
                             while (!validation.isValidAddress(editedContent)) {
-                                System.out.println("Invalid! \nEnter Address: ");
+                                System.out.println("Invalid! \nAddress can not contain special character: ");
                                 editedContent = scanner.nextLine();
                             }
                             manageLeads.updateLeads(leadID, Integer.parseInt(index), editedContent);
@@ -157,10 +162,10 @@ public class Menu {
                     } else if (option == 3) {//delete existing interaction with a validated interaction ID input
                         option = 0;
                         scanner = new Scanner(System.in);
-                        System.out.println("Enter InteractionID: ");
+                        System.out.println("Enter InteractionID(inter_XXX): ");
                         String interactionID = scanner.nextLine();
                         while (!validation.isValidInteractionID(interactionID) || !validation.isInteractionExist(interactionID)) {
-                            System.out.println("Invalid! \nEnter InteractionID: ");
+                            System.out.println("Invalid! \nEnter InteractionID(inter_XXX): ");
                             interactionID = scanner.nextLine();
                         }
                         manageInteraction.deleteInteractions(interactionID);
@@ -168,10 +173,10 @@ public class Menu {
                         option = 0;
                         //getting an existing interaction ID
                         scanner = new Scanner(System.in);
-                        System.out.println("Enter InteractionID: ");
+                        System.out.println("Enter InteractionID(inter_XXX): ");
                         String interactionID = scanner.nextLine();
                         while (!validation.isValidInteractionID(interactionID) || !validation.isInteractionExist(interactionID)) {
-                            System.out.println("Invalid! \nEnter InteractionID: ");
+                            System.out.println("Invalid! \nEnter InteractionID(inter_XXX): ");
                             interactionID = scanner.nextLine();
                         }
                         //getting option for the updating parameter
@@ -194,10 +199,10 @@ public class Menu {
 
                         } else if (Integer.parseInt(index) == 2) {
 
-                            System.out.println("Enter LeadID: ");
+                            System.out.println("Enter LeadID(lead_XXX): ");
                             String editedContent = scanner.nextLine();
                             while (!validation.isValidLeadID(editedContent) || !validation.isLeadExist(editedContent)) {
-                                System.out.println("Invalid! \nEnter LeadID: ");
+                                System.out.println("Invalid! \nEnter LeadID(lead_XXX): ");
                                 editedContent = scanner.nextLine();
                             }
                             manageInteraction.updateInteractions(interactionID, Integer.parseInt(index), editedContent);
@@ -224,8 +229,7 @@ public class Menu {
                     }
                 } while (option != 5);
                 option = 0;
-            } else if (option == 3) {//view summaries
-                option = 0;
+            } else if (option == 3) {//view summaries/
                 do {//getting options for which summary to view
                     System.out.println("(1: Age summary), (2: Potential summary), (3: Interaction summary), (4: Back)");
                     while (!scanner.hasNextInt()) {
@@ -270,7 +274,9 @@ public class Menu {
                         summary.interactionSummary(startDate, endDate);
                     }
                 } while (option != 4);
+                option = 0;
             }
         } while(option !=4);
+
     }
 }

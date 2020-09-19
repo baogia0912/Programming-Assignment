@@ -15,7 +15,7 @@ public class Validation {
     }
 
     public boolean isValidAddress(String address) {
-        String regex = "\\d+\\s+([a-zA-Z]+|[a-zA-Z]+\\s[a-zA-Z]+)";
+        String regex = "\\d+\\s+([a-zA-Z]+|[a-zA-Z]+\\s[a-zA-Z])+";
         return address.matches(regex);
     }
 
@@ -109,6 +109,26 @@ public class Validation {
             e.printStackTrace();
         }
         System.out.println("Interaction's ID does not exist!");
+        return false;
+    }
+
+    public boolean isLeadHaveInteraction(String leadID) {
+        File interaction = new File("interactions.csv");
+
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(interaction));
+
+            String currentLine;
+            while ((currentLine = reader.readLine()) != null) {
+                String[] tokens = currentLine.split(",");
+                // Find the cell
+                if (leadID.equalsIgnoreCase(tokens[2])) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return false;
     }
 }
